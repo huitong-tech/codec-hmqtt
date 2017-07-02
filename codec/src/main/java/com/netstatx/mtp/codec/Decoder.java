@@ -42,7 +42,7 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx , ByteBuf in, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         switch (state()) {
             case READ_FIXED_HEADER:
                 fixedHeader = decodeFixedHeader(in);
@@ -111,6 +111,8 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
             case KEEP_ALIVE:
             case RTC:
                 return new Result<>();
+            case ACK:
+                return new Result<>(in.readInt(), 4);
 
             case AUTH:
                 return decodeAuthPayload(in);

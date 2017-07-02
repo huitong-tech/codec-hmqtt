@@ -1,5 +1,7 @@
 package com.netstatx.mtp.codec;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.util.internal.StringUtil;
 
 /**
@@ -30,6 +32,24 @@ public final class FixedHeader {
 
     public int remainingLength() {
         return remainingLength;
+    }
+
+    public ByteBuf toByteBuf() {
+        int fixedHeaderLength = 8;
+        ByteBuf buf = Unpooled.buffer(fixedHeaderLength);
+        buf.writeByte(magicNumber());
+        buf.writeByte(messageType.value());
+        buf.writeInt(seqNo);
+        buf.writeInt(remainingLength);
+        return buf;
+
+    }
+
+    public byte[] toBytes() {
+        ByteBuf buf = toByteBuf();
+        byte[] bytes = new byte[buf.readableBytes()];
+        buf.readBytes(bytes);
+        return bytes;
     }
 
     @Override
