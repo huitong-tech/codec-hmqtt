@@ -18,10 +18,6 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
     private static final Logger LOG = LoggerFactory.getLogger(Decoder.class);
     private static final int DEFAULT_MAX_BYTES_IN_MESSAGE = 8092;
 
-    /**
-     * States of the decoder.
-     * We start at READ_FIXED_HEADER then READ_PAYLOAD.
-     */
     enum DecoderState {
         READ_FIXED_HEADER,
         READ_PAYLOAD,
@@ -51,6 +47,9 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
 
             case READ_PAYLOAD:
                 try {
+                    if (bytesRemaining > maxBytesInMessage) {
+                        throw new DecoderException("too large message: " + bytesRemaining + " bytes");
+                    }
                     final Result<?> decodedPayload =
                             decodePayload(
                                     in,
@@ -84,7 +83,7 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
 
     private FixedHeader decodeFixedHeader(ByteBuf in) {
         short magicNumber = in.readUnsignedByte();
-        if (magicNumber != 0x37) {
+        if (magicNumber != Constant.MAGIC_NUMBER) {
             in.markReaderIndex();
             throw new IllegalArgumentException();
         }
@@ -98,7 +97,7 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
 
     private Message invalidMessage(Throwable cause) {
         checkpoint(DecoderState.BAD_MESSAGE);
-        return null;
+        return MessageFactory.craftInvalidMessage(cause);
     }
 
     private static Result<?> decodePayload(
@@ -151,8 +150,8 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
     }
 
     private static Result<ReturnCodePayload> decodeReturnCodePayload(ByteBuf in) {
-        Result<Integer> returncode = decodeShort(in);
-        return new Result<>(new ReturnCodePayload(returncode.value), returncode.numberOfBytesConsumed);
+        Result<Integer> returnCode = decodeShort(in);
+        return new Result<>(new ReturnCodePayload(returnCode.value), returnCode.numberOfBytesConsumed);
     }
 
     private static Result<AuthPayload> decodeAuthPayload(ByteBuf in) {
@@ -169,10 +168,6 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
         Result(T value, int numberOfBytesConsumed) {
             this.value = value;
             this.numberOfBytesConsumed = numberOfBytesConsumed;
-        }
-
-        Result(T value) {
-            this(value, 0);
         }
 
         Result() {

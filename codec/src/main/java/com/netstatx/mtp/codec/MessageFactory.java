@@ -7,6 +7,7 @@ import io.netty.handler.codec.DecoderResult;
  */
 public final class MessageFactory {
     public static Message craftMessage(FixedHeader fixedHeader, Object payload) {
+        // TODO: how to craft new message
         return null;
     }
 

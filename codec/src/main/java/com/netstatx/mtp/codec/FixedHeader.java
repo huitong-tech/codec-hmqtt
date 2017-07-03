@@ -18,8 +18,8 @@ public final class FixedHeader {
         this.remainingLength = remainingLength;
     }
 
-    public short magicNumber() {
-        return 0x37;
+    public byte magicNumber() {
+        return Constant.MAGIC_NUMBER;
     }
 
     public MessageType messageType() {
@@ -35,8 +35,7 @@ public final class FixedHeader {
     }
 
     public ByteBuf toByteBuf() {
-        int fixedHeaderLength = 8;
-        ByteBuf buf = Unpooled.buffer(fixedHeaderLength);
+        ByteBuf buf = Unpooled.buffer(Constant.FIXED_HEADER_LENGTH);
         buf.writeByte(magicNumber());
         buf.writeByte(messageType.value());
         buf.writeInt(seqNo);
