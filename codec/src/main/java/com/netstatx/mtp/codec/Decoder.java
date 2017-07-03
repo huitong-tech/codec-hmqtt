@@ -45,6 +45,7 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
                 fixedHeader = decodeFixedHeader(in);
                 bytesRemaining = fixedHeader.remainingLength();
                 checkpoint(DecoderState.READ_FIXED_HEADER);
+                // Fall through
 
             case READ_PAYLOAD:
                 try {
