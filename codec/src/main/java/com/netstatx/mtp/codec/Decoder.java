@@ -11,12 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static com.netstatx.mtp.codec.Constant.*;
+
 /**
  * @author wangle<thisiswangle@gmail.com>
  */
 public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
     private static final Logger LOG = LoggerFactory.getLogger(Decoder.class);
-    private static final int DEFAULT_MAX_BYTES_IN_MESSAGE = 8092;
 
     enum DecoderState {
         READ_FIXED_HEADER,
@@ -84,7 +85,6 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
     private FixedHeader decodeFixedHeader(ByteBuf in) {
         short magicNumber = in.readUnsignedByte();
         if (magicNumber != Constant.MAGIC_NUMBER) {
-            in.markReaderIndex();
             throw new IllegalArgumentException();
         }
 
