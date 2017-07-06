@@ -125,8 +125,8 @@ public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
                 return decodePubAndPubNeedAck(in, bytesRemaining);
 
             default:
-                // unknown payload , no byte consumed
-                return new Result<Object>(null, 0);
+                // Unknown payload , no byte consumed
+                return new Result<>(null, 0);
         }
     }
 
