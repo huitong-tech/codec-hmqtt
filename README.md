@@ -1,2 +1,2 @@
 # codec-mtp
-(Not finished now)MTP Implementation based on Netty
+(Not finished yet)MTP Implementation based on Netty
