@@ -1,7 +1,7 @@
 package com.netstatx.mtp.codec;
 
 /**
- * TODO: Create builder to for message factory to craft message
+ * TODO: Create builder for message factory to craft message
  * @author wangle<thisiswangle@gmail.com>
  */
 public final class MessageBuilders {

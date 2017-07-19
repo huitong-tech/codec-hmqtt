@@ -2,6 +2,7 @@ package com.netstatx.mtp.codec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
@@ -20,7 +21,7 @@ public final class Encoder extends MessageToMessageEncoder<Message> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Message message, List<Object> out) throws Exception {
-        out.add(doEncode(ctx.alloc(), message, generateSeqNo(ctx)));
+        out.add(doEncode(ctx.alloc(), message, generateSeqNo(ctx.channel())));
     }
 
     static ByteBuf doEncode(ByteBufAllocator byteBufAllocator, Message message, int seqNo) {
@@ -39,9 +40,9 @@ public final class Encoder extends MessageToMessageEncoder<Message> {
         }
     }
 
-    private static int generateSeqNo(ChannelHandlerContext ctx) {
-        ctx.attr(SEQ_NO_GENERATOR).setIfAbsent(new AtomicInteger(0));
-        return ctx.attr(SEQ_NO_GENERATOR).get().getAndIncrement();
+    private static int generateSeqNo(Channel ch) {
+        ch.attr(SEQ_NO_GENERATOR).setIfAbsent(new AtomicInteger(0));
+        return ch.attr(SEQ_NO_GENERATOR).get().getAndIncrement();
     }
 
     private static ByteBuf encodeRtcAckMessage(

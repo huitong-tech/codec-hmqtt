@@ -6,16 +6,15 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 
 import java.net.InetSocketAddress;
 
 /**
  * @author wangle<thisiswangle@gmail.com>
  */
+@Log4j2
 public class Bootstrap {
-    private final static Logger LOG = LoggerFactory.getLogger(Bootstrap.class);
     private final int port;
 
     public Bootstrap(int port) {
@@ -36,7 +35,7 @@ public class Bootstrap {
                         }
                     });
             ChannelFuture f = b.bind().sync();
-            LOG.info("Draco started and listen on {}", f.channel().localAddress());
+            log.info("Draco started and listen on {}", f.channel().localAddress());
             f.channel().closeFuture().sync();
         } finally {
             group.shutdownGracefully().sync();

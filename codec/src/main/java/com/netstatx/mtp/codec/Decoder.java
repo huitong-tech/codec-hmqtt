@@ -6,8 +6,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.ReplayingDecoder;
 import io.netty.util.CharsetUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -17,8 +15,6 @@ import static com.netstatx.mtp.codec.Constant.*;
  * @author wangle<thisiswangle@gmail.com>
  */
 public final class Decoder extends ReplayingDecoder<Decoder.DecoderState> {
-    private static final Logger LOG = LoggerFactory.getLogger(Decoder.class);
-
     enum DecoderState {
         READ_FIXED_HEADER,
         READ_PAYLOAD,

@@ -1,6 +1,10 @@
 subprojects {
     apply plugin: 'java'
- 
+
+    dependencies{
+        compileOnly("org.projectlombok:lombok:1.16.18")
+    }
+
     repositories {
         mavenLocal()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
