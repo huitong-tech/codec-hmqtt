@@ -1,4 +1,4 @@
-# codec-mtt
+# codec-hmqtt
 
-Huitong IoT Message Telemetry Transport Protolcol Implementation based on Netty
+HuiCloud IoT Message Telemetry Transport Protolcol Implementation based on Netty
 
